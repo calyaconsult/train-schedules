@@ -1,0 +1,141 @@
+erDiagram
+    Agency ||--o{ Route : has
+    Route ||--o{ Trip : has
+    Trip ||--o{ StopTime : has
+    StopTime }|--|| Stop : belongs_to
+    Trip }|--|| Calendar : follows
+    Calendar ||--o{ CalendarDate : has
+    FareAttribute ||--o{ FareRule : has
+    FareRule }|--|| Route : applies_to
+    Trip }|--|| Shape : follows
+    Trip ||--o{ Frequency : has
+    Stop ||--o{ Transfer : has
+
+    Agency {
+        string agency_id PK
+        string agency_name
+        string agency_url
+        string agency_timezone
+        string agency_lang
+        string agency_phone
+    }
+
+    Route {
+        string route_id PK
+        string agency_id FK
+        string route_short_name
+        string route_long_name
+        string route_desc
+        int route_type
+        string route_url
+        string route_color
+        string route_text_color
+    }
+
+    Trip {
+        string route_id FK
+        string service_id FK
+        string trip_id PK
+        string trip_headsign
+        string trip_short_name
+        int direction_id
+        string block_id
+        string shape_id FK
+        int wheelchair_accessible
+        int bikes_allowed
+    }
+
+    Stop {
+        string stop_id PK
+        string stop_code
+        string stop_name
+        string stop_desc
+        float stop_lat
+        float stop_lon
+        string zone_id
+        string stop_url
+        int location_type
+        string parent_station
+    }
+
+    StopTime {
+        string trip_id FK
+        time arrival_time
+        time departure_time
+        string stop_id FK
+        int stop_sequence
+        string stop_headsign
+        int pickup_type
+        int drop_off_type
+        float shape_dist_traveled
+        int timepoint
+    }
+
+    Calendar {
+        string service_id PK
+        int monday
+        int tuesday
+        int wednesday
+        int thursday
+        int friday
+        int saturday
+        int sunday
+        date start_date
+        date end_date
+    }
+
+    CalendarDate {
+        string service_id FK
+        date date
+        int exception_type
+    }
+
+    FareAttribute {
+        string fare_id PK
+        float price
+        string currency_type
+        int payment_method
+        int transfers
+        string agency_id FK
+        int transfer_duration
+    }
+
+    FareRule {
+        string fare_id FK
+        string route_id FK
+        string origin_id
+        string destination_id
+        string contains_id
+    }
+
+    Shape {
+        string shape_id PK
+        float shape_pt_lat
+        float shape_pt_lon
+        int shape_pt_sequence
+        float shape_dist_traveled
+    }
+
+    Frequency {
+        string trip_id FK
+        time start_time
+        time end_time
+        int headway_secs
+        int exact_times
+    }
+
+    Transfer {
+        string from_stop_id FK
+        string to_stop_id FK
+        int transfer_type
+        int min_transfer_time
+    }
+
+    FeedInfo {
+        string feed_publisher_name
+        string feed_publisher_url
+        string feed_lang
+        date feed_start_date
+        date feed_end_date
+        string feed_version
+    }
